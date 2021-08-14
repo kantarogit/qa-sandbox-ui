@@ -9,9 +9,10 @@ import pageObjects.LoginPage;
 import pageObjects.TestCasesPage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static pageObjects.BasePage.endSession;
 
 public class TestCasesTest {
 
@@ -28,7 +29,7 @@ public class TestCasesTest {
 
     @AfterClass
     public void teardown() {
-        endSession();
+//        endSession();
     }
 
     @BeforeMethod
@@ -40,23 +41,36 @@ public class TestCasesTest {
         assertThat(testCasesPage.isAt(), Matchers.is(true));
     }
 
-    @Test
-    public void shouldRemoveTestCase() {
+    @Test(enabled = false)
+    public void shouldRemoveAllTestCases() {
 
         List<WebElement> allTestCases = testCasesPage.getAllTestCases();
         int lastIndex = allTestCases.size();
-        System.out.print(allTestCases.size());
 
         while (lastIndex > 0) {
-            testCasesPage.deleteTestCase(allTestCases.get(lastIndex-1));
+            testCasesPage.deleteTestCase(allTestCases.get(lastIndex - 1));
             allTestCases = testCasesPage.getAllTestCases();
             lastIndex = allTestCases.size();
-            System.out.print(lastIndex);
         }
 
         assertThat(testCasesPage.getAllTestCases().size(), Matchers.is(0));
     }
 
+    @Test
+    public void shouldAddNewTestCase() {
+        String testCaseName = "asdasd1e1d";
 
+        testCasesPage.createNewTestCase()
+                .withTitle(testCaseName)
+                .withDescription("desc")
+                .withExpectedResult("1")
+                .withSteps(asList("123", "123134"))
+                .submit();
 
+        List<String> testCasesNames = testCasesPage.getAllTestCases()
+                .stream().map(WebElement::getText)
+                .collect(Collectors.toList());
+
+        assertThat(testCasesNames, Matchers.hasItem(testCaseName));
+    }
 }
