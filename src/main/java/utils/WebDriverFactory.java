@@ -15,4 +15,8 @@ public class WebDriverFactory {
 
         return driver;
     }
+
+    public static void closeBrowser() {
+        driver.close();
+    }
 }
