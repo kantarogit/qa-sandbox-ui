@@ -7,12 +7,15 @@ import org.testng.annotations.Test;
 import pageObjects.DashboardPage;
 import pageObjects.LoginPage;
 import pageObjects.TestCasesPage;
+import utils.MandatoryField;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static pageObjects.BasePage.endSession;
 
 public class TestCasesTest {
 
@@ -29,7 +32,7 @@ public class TestCasesTest {
 
     @AfterClass
     public void teardown() {
-//        endSession();
+        endSession();
     }
 
     @BeforeMethod
@@ -58,7 +61,7 @@ public class TestCasesTest {
 
     @Test
     public void shouldAddNewTestCase() {
-        String testCaseName = "asdasd1e1d";
+        String testCaseName = UUID.randomUUID().toString().replace("-", "");
 
         testCasesPage.createNewTestCase()
                 .withTitle(testCaseName)
@@ -68,9 +71,51 @@ public class TestCasesTest {
                 .submit();
 
         List<String> testCasesNames = testCasesPage.getAllTestCases()
-                .stream().map(WebElement::getText)
+                .stream()
+                .map(WebElement::getText)
                 .collect(Collectors.toList());
 
         assertThat(testCasesNames, Matchers.hasItem(testCaseName));
+    }
+
+    @Test
+    public void titleFieldIsMandatory() {
+
+        testCasesPage.createNewTestCase()
+                .withDescription("desc")
+                .withExpectedResult("1")
+                .withSteps(asList("123", "123134"))
+                .submit();
+
+        assertThat(testCasesPage.validationError(MandatoryField.TITLE), Matchers.is("Title is required"));
+    }
+
+    @Test
+    public void expectedResultFieldIsMandatory() {
+        String testCaseName = UUID.randomUUID().toString().replace("-", "");
+
+        testCasesPage.createNewTestCase()
+                .withTitle(testCaseName)
+                .withDescription("desc")
+                .withSteps(asList("123", "123134"))
+                .submit();
+
+        assertThat(testCasesPage.validationError(MandatoryField.EXPECTED_RESULT),
+                Matchers.is("Expected result is required"));
+    }
+
+    @Test
+    public void testStepsAreMandatory() {
+
+        String testCaseName = UUID.randomUUID().toString().replace("-", "");
+
+        testCasesPage.createNewTestCase()
+                .withTitle(testCaseName)
+                .withDescription("desc")
+                .withExpectedResult("1")
+                .submit();
+
+        assertThat(testCasesPage.validationError(MandatoryField.TEST_STEPS),
+                Matchers.is("There must be at least one test step"));
     }
 }

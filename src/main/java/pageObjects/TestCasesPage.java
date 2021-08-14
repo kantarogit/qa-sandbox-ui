@@ -5,6 +5,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import utils.MandatoryField;
 import utils.TestCaseDialogAction;
 
 import java.util.ArrayList;
@@ -49,6 +50,16 @@ public class TestCasesPage extends BasePage {
     @FindBy(how = How.CLASS_NAME, using = "submit-button")
     private WebElement submitButton;
 
+    //needed for navigating to the validation-msg element
+    @FindBy(how = How.XPATH, using = "//*[text()='Title*']")
+    private WebElement labelTitleMandatory;
+
+    @FindBy(how = How.XPATH, using = "//*[text()='Expected Result*']")
+    private WebElement labelExpectedResultMandatory;
+
+    @FindBy(how = How.XPATH, using = "//*[text()='Test steps*']")
+    private WebElement labelTestStepsMandatory;
+
     public TestCasesPage() {
         super(PAGE_URL);
     }
@@ -86,11 +97,32 @@ public class TestCasesPage extends BasePage {
         return new TestCaseSyntax();
     }
 
+    public String validationError(MandatoryField mandatoryField) {
+        switch (mandatoryField) {
+            case TITLE:
+                return labelTitleMandatory
+                        .findElement(By.xpath("../parent::*"))
+                        .findElement(By.id("validation-msg")).getText();
+
+            case EXPECTED_RESULT:
+                return labelExpectedResultMandatory
+                        .findElement(By.xpath("../parent::*"))
+                        .findElement(By.id("validation-msg")).getText();
+
+            case TEST_STEPS:
+                return labelTestStepsMandatory
+                        .findElement(By.xpath("../parent::*"))
+                        .findElement(By.id("validation-msg")).getText();
+
+            default:
+                return "No validations found";
+        }
+    }
+
     public class TestCaseSyntax {
 
         //prevent new TestCasesPage().new TestCaseSyntax();
         private TestCaseSyntax() {
-
         }
 
         public TestCaseSyntax withTitle(String title) {
