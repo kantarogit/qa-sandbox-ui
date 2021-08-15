@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestCasesPage extends BasePage {
+
     private static final String PAGE_URL = "https://qa-sandbox.ni.htec.rs/testcases";
 
     @FindBy(how = How.CLASS_NAME, using = "portrait-grid")

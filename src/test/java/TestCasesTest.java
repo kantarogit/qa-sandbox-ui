@@ -1,3 +1,4 @@
+import dataProvider.TestCasesDataProvider;
 import org.hamcrest.Matchers;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterClass;
@@ -28,6 +29,10 @@ public class TestCasesTest {
         loginPage = new LoginPage();
         testCasesPage = new TestCasesPage();
         dashboardPage = new DashboardPage();
+
+        loginPage.goTo();
+        loginPage.submitCredentials("kantarofilip@gmail.com", "htec123");
+        assertThat(dashboardPage.isAt(), Matchers.is(true));
     }
 
     @AfterClass
@@ -37,9 +42,6 @@ public class TestCasesTest {
 
     @BeforeMethod
     public void beforeEachTest() {
-        loginPage.goTo();
-        loginPage.submitCredentials("kantarofilip@gmail.com", "htec123");
-        assertThat(dashboardPage.isAt(), Matchers.is(true));
         testCasesPage.goTo();
         assertThat(testCasesPage.isAt(), Matchers.is(true));
     }
@@ -59,15 +61,14 @@ public class TestCasesTest {
         assertThat(testCasesPage.getAllTestCases().size(), Matchers.is(0));
     }
 
-    @Test
-    public void shouldAddNewTestCase() {
-        String testCaseName = UUID.randomUUID().toString().replace("-", "");
+    @Test(dataProvider = "testCasesValidData", dataProviderClass = TestCasesDataProvider.class)
+    public void shouldAddNewTestCase(String title, String description, String expectedResult, List<String> testSteps) {
 
         testCasesPage.createNewTestCase()
-                .withTitle(testCaseName)
-                .withDescription("desc")
-                .withExpectedResult("1")
-                .withSteps(asList("123", "123134"))
+                .withTitle(title)
+                .withDescription(description)
+                .withExpectedResult(expectedResult)
+                .withSteps(testSteps)
                 .submit();
 
         List<String> testCasesNames = testCasesPage.getAllTestCases()
@@ -75,7 +76,7 @@ public class TestCasesTest {
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
 
-        assertThat(testCasesNames, Matchers.hasItem(testCaseName));
+        assertThat(testCasesNames, Matchers.hasItem(title));
     }
 
     @Test

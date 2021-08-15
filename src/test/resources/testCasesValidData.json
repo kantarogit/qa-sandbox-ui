@@ -1,0 +1,40 @@
+{
+  "testCases": [
+    {
+      "title": "Create Valid Test Case",
+      "description": "Should create new test case",
+      "expectedResult": "test case visible in thumbnails",
+      "testSteps": [
+        "login with valid credentials",
+        "click create new test case button",
+        "enter all fields",
+        "click sumbmit"
+      ]
+    },
+    {
+      "title": "Test Case Title is mandatory",
+      "description": "Should not create a new test case without title",
+      "expectedResult": "error message displayed",
+      "testSteps": [
+        "login with valid credentials",
+        "click create new test case button",
+        "fill all the fields but title",
+        "click sumbmit"
+      ]
+    },
+    {
+      "title": "Test Case Title should be unique",
+      "description": "Should not create a new test case without already existing title",
+      "expectedResult": "error message displayed",
+      "testSteps": [
+        "login with valid credentials",
+        "click create new test case button",
+        "fill all the fields",
+        "click submit",
+        "click create new test case button again",
+        "fill all the fields but use previosly used title",
+        "click submit"
+      ]
+    }
+  ]
+}

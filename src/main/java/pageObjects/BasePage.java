@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.WebDriverFactory;
 
 public class BasePage {
+
     protected WebDriver driver;
     private String pageUrl;
 
@@ -24,6 +25,7 @@ public class BasePage {
         this.pageUrl = pageUrl;
     }
 
+    //todo
     public void navigateToAnotherPage(String pageLinkText) {
         leftSideMenu.findElement(By.xpath("//a[contains(text(),'" + pageLinkText + "')]")).click();
     }
