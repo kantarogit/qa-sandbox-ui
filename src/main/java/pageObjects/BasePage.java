@@ -1,6 +1,5 @@
 package pageObjects;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,11 +22,6 @@ public class BasePage {
         PageFactory.initElements(driver, this);
         driver.manage().window().maximize();
         this.pageUrl = pageUrl;
-    }
-
-    //todo
-    public void navigateToAnotherPage(String pageLinkText) {
-        leftSideMenu.findElement(By.xpath("//a[contains(text(),'" + pageLinkText + "')]")).click();
     }
 
     public void goTo() {
