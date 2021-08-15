@@ -21,11 +21,12 @@ public class TestCasesDataProvider {
                 new File("src/test/resources/testCasesValidData.json"), TestCasesRootJsonModel.class)
                 .getTestCases()
                 .forEach(testCase -> {
-                    Object[] dataRow = new Object[4];
+                    Object[] dataRow = new Object[5];
                     dataRow[0] = testCase.getTitle();
                     dataRow[1] = testCase.getDescription();
                     dataRow[2] = testCase.getExpectedResult();
                     dataRow[3] = testCase.getTestSteps();
+                    dataRow[4] = testCase.getAutomated();
                     returnData.add(dataRow);
                 });
 

@@ -8,8 +8,9 @@
         "login with valid credentials",
         "click create new test case button",
         "enter all fields",
-        "click sumbmit"
-      ]
+        "click submit"
+      ],
+      "automated": true
     },
     {
       "title": "Test Case Title is mandatory",
@@ -19,8 +20,9 @@
         "login with valid credentials",
         "click create new test case button",
         "fill all the fields but title",
-        "click sumbmit"
-      ]
+        "click submit"
+      ],
+      "automated": true
     },
     {
       "title": "Test Case Title should be unique",
@@ -34,7 +36,8 @@
         "click create new test case button again",
         "fill all the fields but use previosly used title",
         "click submit"
-      ]
+      ],
+      "automated": false
     }
   ]
 }

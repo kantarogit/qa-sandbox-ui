@@ -8,6 +8,7 @@ public class TestCaseModel {
     private String description;
     private String expectedResult;
     private List<String> testSteps;
+    private boolean automated;
 
     public String getTitle() {
         return title;
@@ -23,5 +24,9 @@ public class TestCaseModel {
 
     public List<String> getTestSteps() {
         return testSteps;
+    }
+
+    public boolean getAutomated() {
+        return automated;
     }
 }

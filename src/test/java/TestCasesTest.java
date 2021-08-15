@@ -62,13 +62,15 @@ public class TestCasesTest {
     }
 
     @Test(dataProvider = "testCasesValidData", dataProviderClass = TestCasesDataProvider.class)
-    public void shouldAddNewTestCase(String title, String description, String expectedResult, List<String> testSteps) {
+    public void shouldAddNewTestCase(String title, String description, String expectedResult,
+                                     List<String> testSteps, boolean isAutomated) {
 
         testCasesPage.createNewTestCase()
                 .withTitle(title)
                 .withDescription(description)
                 .withExpectedResult(expectedResult)
                 .withSteps(testSteps)
+                .isAutomated(isAutomated)
                 .submit();
 
         List<String> testCasesNames = testCasesPage.getAllTestCases()

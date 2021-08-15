@@ -61,6 +61,9 @@ public class TestCasesPage extends BasePage {
     @FindBy(how = How.XPATH, using = "//*[text()='Test steps*']")
     private WebElement labelTestStepsMandatory;
 
+    @FindBy(how = How.CLASS_NAME, using = "react-switch-handle")
+    private WebElement automatedSwitch;
+
     public TestCasesPage() {
         super(PAGE_URL);
     }
@@ -151,6 +154,23 @@ public class TestCasesPage extends BasePage {
                     newTestStep.click();
                 }
             }
+            return this;
+        }
+
+        //checks if unchecked, uncheck if checked :)
+        public TestCaseSyntax isAutomated(boolean isAutomated) {
+
+            //true for unchecked
+            boolean state = automatedSwitch.getAttribute("style").contains("translateX(1px)");
+
+            if (isAutomated && state) {
+                automatedSwitch.click();
+            }
+
+            if (!isAutomated && !state) {
+                automatedSwitch.click();
+            }
+
             return this;
         }
 
