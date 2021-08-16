@@ -1,6 +1,6 @@
 import dataProvider.TestCasesDataProvider;
-import org.hamcrest.Matchers;
 import org.openqa.selenium.WebElement;
+import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 import static pageObjects.BasePage.endSession;
 
 public class TestCasesTest {
@@ -32,7 +34,7 @@ public class TestCasesTest {
 
         loginPage.goTo();
         loginPage.submitCredentials("kantarofilip@gmail.com", "htec123");
-        assertThat(dashboardPage.isAt(), Matchers.is(true));
+        assertThat(dashboardPage.isAt(), is(true));
     }
 
     @AfterClass
@@ -43,7 +45,7 @@ public class TestCasesTest {
     @BeforeMethod
     public void beforeEachTest() {
         testCasesPage.goTo();
-        assertThat(testCasesPage.isAt(), Matchers.is(true));
+        assertThat(testCasesPage.isAt(), is(true));
     }
 
     @Test(enabled = false)
@@ -52,13 +54,19 @@ public class TestCasesTest {
         List<WebElement> allTestCases = testCasesPage.getAllTestCases();
         int lastIndex = allTestCases.size();
 
+        if (lastIndex == 0) {
+            throw new SkipException("Not the best way, better create test setup that creates a new test case. Anyway" +
+                    "better than leaving without this throw exception since the test will always pass even with no test " +
+                    "cases to be deleted.");
+        }
+
         while (lastIndex > 0) {
             testCasesPage.deleteTestCase(allTestCases.get(lastIndex - 1));
             allTestCases = testCasesPage.getAllTestCases();
             lastIndex = allTestCases.size();
         }
 
-        assertThat(testCasesPage.getAllTestCases().size(), Matchers.is(0));
+        assertThat(testCasesPage.getAllTestCases().size(), is(0));
     }
 
     @Test(dataProvider = "testCasesValidData", dataProviderClass = TestCasesDataProvider.class)
@@ -78,7 +86,7 @@ public class TestCasesTest {
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
 
-        assertThat(testCasesNames, Matchers.hasItem(title));
+        assertThat(testCasesNames, hasItem(title));
     }
 
     @Test
@@ -90,7 +98,7 @@ public class TestCasesTest {
                 .withSteps(asList("123", "123134"))
                 .submit();
 
-        assertThat(testCasesPage.validationError(MandatoryField.TITLE), Matchers.is("Title is required"));
+        assertThat(testCasesPage.validationError(MandatoryField.TITLE), is("Title is required"));
     }
 
     @Test
@@ -104,7 +112,7 @@ public class TestCasesTest {
                 .submit();
 
         assertThat(testCasesPage.validationError(MandatoryField.EXPECTED_RESULT),
-                Matchers.is("Expected result is required"));
+                is("Expected result is required"));
     }
 
     @Test
@@ -119,6 +127,6 @@ public class TestCasesTest {
                 .submit();
 
         assertThat(testCasesPage.validationError(MandatoryField.TEST_STEPS),
-                Matchers.is("There must be at least one test step"));
+                is("There must be at least one test step"));
     }
 }
